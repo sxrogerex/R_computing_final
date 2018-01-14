@@ -3,13 +3,11 @@ if (!require(car)) install.packages("car")
 if (!require(zoo)) install.packages("zoo")
 if (!require(lmtest)) install.packages("lmtest")
 if (!require(sandwich)) install.packages("sandwich")
-if (!require(ggplot2)) install.packages("ggplot2")
 library(MASS) #model choosing
-library(car)
+library(car) #VIF
 library(zoo)
 library(lmtest) #testing for linear regression
 library(sandwich)
-library(ggplot2) #visualization
 
 #Load Data
 data<-read.csv("data.csv",header = TRUE, sep = ",")
@@ -75,15 +73,15 @@ summary(fit2.2)
 #Both step(), stepAIC() choose the same model
 # Y ~ X1 + X4 + X6 + X7 + X9 + X12 + X13
 
-#Remove the variable of highest ™¤pvalue: X12, because some variable's p-value is not significant
+#Remove the variable of highest pvalue: X12, because some variable's p-value is not significant
 fit3<-lm(Y ~ X1 + X4 + X6 + X7 + X9 + X13,data=data)  
 summary(fit3)
-#Remove the variable of highest ™¤pvalue: X13, because some variable's p-value is not significant
+#Remove the variable of highest pvalue: X13, because some variable's p-value is not significant
 fit3<-lm(Y ~ X1 + X4 + X6 + X7 + X9,data=data)  
-summary(fit4)
-#Remove the variable of highest ™¤pvalue: X6, because some variable's p-value is not significant
+summary(fit3)
+#Remove the variable of highest pvalue: X6, because some variable's p-value is not significant
 fit3<-lm(Y ~ X1 + X4 + X7 + X9,data=data)  
-summary(fit4)
+summary(fit3)
 #All variables' p-value are significant
 
 #Scatter Diagram
@@ -92,7 +90,7 @@ plot(data_select,col=c("orange","blue"))
 
 #Correlation matrix
 correlation.matrix<-cor(data[,c("X1","X4","X7","X9")])
-correlation.matrix
+View(correlation.matrix)
 
 #Variance Inflation Factor(VIF)
 VIF <- sqrt(vif(fit3))
